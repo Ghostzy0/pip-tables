@@ -6,7 +6,9 @@ A local desktop workbench for the question behind your spreadsheet. Import a fil
 
 ![Pip Tables showing a synthetic regional chart](assets/pip-core.png)
 
-## Four configurations
+## Custom workbench configurations
+
+The four primary campaign editions are the [separate Neutral Core conversation replica](https://github.com/Ghostzy0/pip-tables-replica), Pip Core, Neutral Plus and Pip Plus. This repository preserves the original neutral Workbench Core configuration for compatibility; it is not the Julius-style replica.
 
 One engine, two appearances and an explicit Plus feature set. Core and Plus use the same format-2 projects, which you open deliberately. Each package has its own app identity; Pip appearance preferences are separate between Core and Plus. Switching versions never automatically replaces a project.
 
@@ -78,3 +80,5 @@ Maintained by [Ghostzy0](https://github.com/Ghostzy0). MIT original application,
 [Julius](https://julius.ai/faq/chat-start-guide) is a workflow reference; a bounded free-account synthetic analysis matched the documented numerical oracle. File upload and actual downloaded output remain unverified. [Duckling](https://github.com/l1xnan/duckling/tree/02f9696bd57e554af1e370440928a4f1c79f420e) is an MIT desktop SQL reference, not an imported foundation. [DuckDB](https://github.com/duckdb/duckdb/tree/v1.4.3) provides the embedded query engine. No complete reference-parity or production-readiness claim is made.
 
 [FAQ](docs/FAQ.md) · [How to analyse a file](docs/HOW-TO.md) · [Projects and upgrades](docs/PROJECTS-AND-UPGRADES.md) · [Source and releases](https://github.com/Ghostzy0/pip-tables)
+
+![Final Pip Plus native result paging with synthetic data](assets/pip-plus-native.png)
