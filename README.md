@@ -1,4 +1,4 @@
-# Pip Tables
+# Pip Tables: local CSV, Excel and Parquet analysis
 
 A local desktop workbench for the question behind your spreadsheet. Import a file, inspect its columns, build a query and keep the result with its source.
 
@@ -37,7 +37,7 @@ Use Python 3.13 on macOS 13 or newer, arm64. The package recipe is currently mac
 4. Try the regional-revenue example in [examples](examples/README.md), then open Chart. Exact values remain in Results.
 5. Press **Export query**, choose a new destination outside the project. Export reruns the last successful query with all matching rows, even when only the first 1,000 are shown. Existing files are never replaced. Time/random-generated values may differ because export reruns the query; it is not a frozen result snapshot.
 
-Plus inspects up to 20 rows with the actual inferred types before you confirm import; Excel sheets appear in a picker. Inspection stages up to1,000,001rows in a temporary local database and rejects files over1mrows and removes it afterward. A source hash is checked again before/after import; changed sources require reinspection. Large inspections can take time and disk space. Core imports directly after its options dialog.
+Plus inspects up to 20 rows with the actual inferred types before you confirm import; Excel sheets appear in a picker. Inspection stages up to 1,000,001 rows in a temporary local database and rejects files overone million rows and removes it afterward. A source hash is checked again before/after import; changed sources require reinspection. Large inspections can take time and disk space. Core imports directly after its options dialog.
 
 Plus also offers Previous/Next rows in pages of 1,000. The row range and exact count stay visible; navigation adds no query-history entries. Pages rerun the query, so use `ORDER BY` for an order. Generated/changing values can move across pages; a frozen paged snapshot is not promised. Export still reruns the full successful query. A failed page keeps the previous displayed page.
 
@@ -47,7 +47,7 @@ Open the project folder later to restore imported tables, history and your query
 
 CSV (UTF-8/BOM, UTF-16, Latin-1), selected-sheet XLSX, JSON/NDJSON and Parquet imports. Schema and missing/distinct/min/max profiling. Read-only DuckDB SQL for filters, transformations, joins, grouped summaries and pivots. Categorical bar/line/point charts use the first two columns and at most 50 rows; the grid provides exact values. CSV/XLSX/JSON/Parquet exports, durable local projects and successful-query history.
 
-Preview is capped at 1,000 rows, 512 columns, 8 MiB and 1 MiB per cell. Queries/profiles have 10-second deadlines; imports/exports have cooperative120-second deadlines and a one-million-row limit. XLSX preflight caps expanded contents at256MiB, shared strings at16MiB and each worksheet XML at128MiB. Stop/deadline waits for any in-progress Python parser call before reporting. Exports allow up to one million rows and 120 seconds. The native engine has a 512 MB working-memory limit and disk spill is disabled. Large or complex inputs may fail safely; this is not an unlimited warehouse. No natural-language assistant, spreadsheet cell editing, macros, remote database connections or provider sign-in is included.
+Preview is capped at 1,000 rows, 512 columns, 8 MiB and 1 MiB per cell. Queries/profiles have 10-second deadlines; imports/exports have cooperative120-second deadlines and a one-million-row limit. XLSX preflight caps expanded contents at 256 MiB, shared strings at 16 MiB and each worksheet XML at 128 MiB. Stop/deadline waits for any in-progress Python parser call before reporting. Exports allow up to one million rows and 120 seconds. The native engine has a 512 MB working-memory limit and disk spill is disabled. Large or complex inputs may fail safely; this is not an unlimited warehouse. No natural-language assistant, spreadsheet cell editing, macros, remote database connections or provider sign-in is included.
 
 Excel formula cells are rejected on import. Export values from your spreadsheet first. A multi-sheet workbook needs an explicit sheet name. CSV can be kept as text; use visible `TRY_CAST`/date functions to choose types. Mixed wide-integer/fractional Excel columns remain text rather than losing significant digits. JSON decimal/date/UUID/binary values use exact text/ISO/hex; nonfinite values become null. Excel writes exact decimals/large integers and nested values as text and rejects oversized cells. Formula-like CSV/XLSX text receives an apostrophe prefix for safety. Use Parquet for typed roundtrips; these formats are not interchangeable archives.
 
@@ -76,3 +76,5 @@ Builds are in `dist/`. A clean virtual environment is required for release build
 Maintained by [Ghostzy0](https://github.com/Ghostzy0). MIT original application, with dynamically linked LGPLv3 Qt/PySide libraries and MIT DuckDB/openpyxl. No private reference recordings, proprietary motion code or model weights are shipped. [Foundation notes](UPSTREAM.md) document exact versions and the original-implementation decision.
 
 [Julius](https://julius.ai/faq/chat-start-guide) is a workflow reference; a bounded free-account synthetic analysis matched the documented numerical oracle. File upload and actual downloaded output remain unverified. [Duckling](https://github.com/l1xnan/duckling/tree/02f9696bd57e554af1e370440928a4f1c79f420e) is an MIT desktop SQL reference, not an imported foundation. [DuckDB](https://github.com/duckdb/duckdb/tree/v1.4.3) provides the embedded query engine. No complete reference-parity or production-readiness claim is made.
+
+[FAQ](docs/FAQ.md) · [How to analyse a file](docs/HOW-TO.md) · [Projects and upgrades](docs/PROJECTS-AND-UPGRADES.md) · [Source and releases](https://github.com/Ghostzy0/pip-tables)

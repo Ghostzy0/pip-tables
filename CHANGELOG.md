@@ -8,7 +8,7 @@ Separate neutral/Pip Plus configurations add first-20-row import inspection with
 
 Original native baseline plus original Pip appearance. Selected CSV/XLSX/JSON/NDJSON/Parquet imports, profiles, visible read-only SQL, deterministic builder, literal search/header sorting, history/draft projects, charts and safe full-query exports. Pip includes nine light/dark anchors and one short completion nod, with Still Pip and native Reduce Motion fallback; no idle animation.
 
-Independent review fixes prevent existing-file overwrites including project/input aliases, retain wide Excel integers, bound preview bytes before copying into Python, validate project history/schema, support UUID/structured exports, remove unsupported TSV, repair sort/recovery/status/layout and clarify that export reruns SQL. First supported project format is 2; unreleased format-1 fixtures are rejected unchanged. Release resource review applies the same memory/thread/spill limits to Parquet staging.
+Independent review fixes prevent existing-file overwrites including project/input aliases, retain wide Excel integers, bound preview bytes before copying into Python, validate project history/schema, support UUID/structured exports, remove unsupported TSV, repair sort/recovery/status/layout and clarify that export reruns SQL. First supported project format is 2; unreleased format-1 fixtures are rejected unchanged. Release resource review applies the same memory/thread/spill limits to native Parquet COPY. A measured million-row export timeout was fixed by replacing Python row insertion with a single bounded native writer, exact temporary-file permissions and cleanup. Actual exported counts include volatile-query results.
 
 ## Acceptance boundary
 

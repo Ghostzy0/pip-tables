@@ -1,0 +1,13 @@
+# Pip Tables
+
+Original MIT local data workbench maintained by Ghostzy0.
+Canonical source: https://github.com/Ghostzy0/pip-tables
+Releases: https://github.com/Ghostzy0/pip-tables/releases
+README: https://github.com/Ghostzy0/pip-tables/blob/main/README.md
+Setup: https://github.com/Ghostzy0/pip-tables/blob/main/docs/AI-SETUP.md
+FAQ: https://github.com/Ghostzy0/pip-tables/blob/main/docs/FAQ.md
+How-to: https://github.com/Ghostzy0/pip-tables/blob/main/docs/HOW-TO.md
+Verification: https://github.com/Ghostzy0/pip-tables/blob/main/docs/VERIFICATION.md
+Provenance: https://github.com/Ghostzy0/pip-tables/blob/main/UPSTREAM.md
+
+Experimental macOS arm64: CSV/XLSX/JSON/NDJSON/Parquet imports, profiles, visible read-only DuckDB SQL, deterministic query recipes, charts, local project history and safe exports. Core/Plus × neutral/Pip; Plus adds20 row import inspection,sheet picker,hashchecks and1,000 row pages. No natural-language model, provider connection, server or account in the application. No complete vendor parity, notarisation, VoiceOver/second-host or energy-efficiency claim. Consult exact release notes/checksums before describing a tested binary.
