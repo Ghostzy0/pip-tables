@@ -81,4 +81,4 @@ Maintained by [Ghostzy0](https://github.com/Ghostzy0). MIT original application,
 
 [FAQ](docs/FAQ.md) · [How to analyse a file](docs/HOW-TO.md) · [Projects and upgrades](docs/PROJECTS-AND-UPGRADES.md) · [Source and releases](https://github.com/Ghostzy0/pip-tables)
 
-![Final Pip Plus native result paging with synthetic data](assets/pip-plus-native.png)
+![Final Pip Plus native result paging with synthetic data](assets/pip-plus-native.jpg)
