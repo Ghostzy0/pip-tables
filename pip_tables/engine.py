@@ -808,8 +808,39 @@ class Project:
                 raise FileExistsError("Exports never replace existing files. Choose a new filename")
             fd, temporary = tempfile.mkstemp(prefix=".pip-export-", suffix="." + kind, dir=target.parent)
             os.close(fd)
+            writer_temporary = None
             try:
-                with self._connect(read_only=True) as conn:
+                # Parquet needs DuckDB's native writer for bounded, vectorized
+                # output. Start with external access enabled only long enough to
+                # grant that connection access to this one random temporary file,
+                # then permanently disable external access before validating or
+                # executing any user SQL.
+                if kind == "parquet":
+                    conn = duckdb.connect(
+                        str(self._db), read_only=True,
+                        config={"autoload_known_extensions": "false",
+                                "autoinstall_known_extensions": "false",
+                                "allow_unsigned_extensions": "false"},
+                    )
+                    try:
+                        self._apply_limits(conn)
+                        temporary_path = Path(temporary)
+                        # DuckDB writes to a sibling tmp_<name> before its final
+                        # atomic rename, so both exact generated filenames must be
+                        # authorized. Neither their parent directory nor a wildcard
+                        # is granted.
+                        writer_temporary = str(temporary_path.with_name("tmp_" + temporary_path.name))
+                        if Path(writer_temporary).exists():
+                            writer_temporary = None
+                            raise FileExistsError("Export temporary sibling already exists; choose another filename")
+                        conn.execute("SET allowed_paths = ?", [[temporary, writer_temporary]])
+                        conn.execute("SET enable_external_access = false")
+                    except Exception:
+                        conn.close()
+                        raise
+                else:
+                    conn = self._connect(read_only=True)
+                with conn:
                     normalized = self._validate_sql(conn, sql)
                     self._cancelled.clear()
                     self._start_active(conn)
@@ -834,36 +865,24 @@ class Project:
                                 raise InterruptedError("Export stopped")
                             yield rows
                     try:
-                        count = conn.execute(f"SELECT count(*) FROM ({normalized}) AS _pip_count").fetchone()[0]
-                        if count > _MAX_EXPORT_ROWS:
-                            raise ValueError(f"Export exceeds {_MAX_EXPORT_ROWS:,} rows")
                         if kind == "parquet":
-                            # This read-only connection cannot write files. Stream into
-                            # an isolated temporary DuckDB, then let it write Parquet.
-                            cursor = conn.execute(f"SELECT * FROM ({normalized}) AS _pip_export")
-                            columns = _export_columns([item[0] for item in cursor.description])
-                            types = [str(item[1]) for item in cursor.description]
-                            stage_path = temporary + ".duckdb"
-                            try:
-                                stage = duckdb.connect(stage_path, config={"autoload_known_extensions": "false", "autoinstall_known_extensions": "false", "allow_unsigned_extensions": "false"})
-                                self._apply_limits(stage)
-                                self._start_active(stage)
-                                try:
-                                    definition = ", ".join(f"{_ident(n)} {t}" for n, t in zip(columns, types))
-                                    stage.execute(f"CREATE TABLE _pip_export ({definition})")
-                                    placeholders = ",".join("?" for _ in columns)
-                                    for rows in batches(cursor):
-                                        if expired.is_set(): raise TimeoutError("Export timed out")
-                                        if self._cancelled.is_set(): raise InterruptedError("Export stopped")
-                                        stage.executemany(f"INSERT INTO _pip_export VALUES ({placeholders})", rows)
-                                    stage.execute("COPY _pip_export TO ? (FORMAT PARQUET)", [temporary])
-                                finally:
-                                    self._end_active(stage)
-                                    stage.close()
-                            finally:
-                                Path(stage_path).unlink(missing_ok=True)
-                                Path(stage_path + ".wal").unlink(missing_ok=True)
+                            # The row cap is part of the one materializing query:
+                            # COPY returns the number actually written, so volatile
+                            # queries are never run once for a count and again for
+                            # the export. DuckDB's vectorized COPY preserves types
+                            # and nested values without Python row conversion.
+                            bounded = f"SELECT * FROM ({normalized}) AS _pip_export LIMIT {_MAX_EXPORT_ROWS + 1}"
+                            stats = conn.execute(
+                                f"COPY ({bounded}) TO ? (FORMAT PARQUET, RETURN_STATS)",
+                                [temporary],
+                            ).fetchone()
+                            written = int(stats[1])
+                            if written > _MAX_EXPORT_ROWS:
+                                raise ValueError(f"Export exceeds {_MAX_EXPORT_ROWS:,} rows")
                         else:
+                            count = conn.execute(f"SELECT count(*) FROM ({normalized}) AS _pip_count").fetchone()[0]
+                            if count > _MAX_EXPORT_ROWS:
+                                raise ValueError(f"Export exceeds {_MAX_EXPORT_ROWS:,} rows")
                             cursor = conn.execute(f"SELECT * FROM ({normalized}) AS _pip_export")
                             columns = _export_columns([item[0] for item in cursor.description])
                             if kind == "csv":
@@ -917,6 +936,8 @@ class Project:
                 return written
             finally:
                 Path(temporary).unlink(missing_ok=True)
+                if writer_temporary is not None:
+                    Path(writer_temporary).unlink(missing_ok=True)
 
     def close(self) -> None:
         with self._lock:
