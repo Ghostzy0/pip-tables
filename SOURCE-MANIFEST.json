@@ -193,7 +193,7 @@
   "pip_tables/__init__.py": "4bba39c5311e0306d7aa4f8b62ad4262215f7b90141b8c7d5f771adfd096bd74",
   "pip_tables/__main__.py": "7c40540b06cc4cb456f1b59d163b757d96d23ba04562e268c02722851f68858e",
   "pip_tables/copy.py": "3380ea88621c3d6817b29ecb5632de0808f70ca8657b15cf991a37378b2a74af",
-  "pip_tables/engine.py": "453c2ae088e351e94655983f48eff0196d47a5261a95eff4324e0abb1d9ae3c3",
+  "pip_tables/engine.py": "8f0908dcb6326bc89d0694df10d4df61ca14b8b350f5c50bbd1f9b54908a0cba",
   "pip_tables/plus_ui.py": "b641b9b0b8c245643f48627f2b971607887ac43fa0b46d512d7b8ee245da1be8",
   "pip_tables/smoke.py": "044f38f299eabcd66f6968fd7fb65c6b289e256986942b688f35abd1a99fd22c",
   "pip_tables/theme.py": "fbdfbad19d87565eae46396a59ee483570c338167f6a0cfbdd8c06ed4c678489",
@@ -206,7 +206,8 @@
   "scripts/render.py": "838122bb625efdce8ab35c1547faedeb9ac514a505be69f3955c1cea17d85d33",
   "tests/test_engine.py": "d73ba995b43d85e6a86cec0fdb43c44fea9eaf951e30cdd522dcf9591446987d",
   "tests/test_import_budgets.py": "f8a003666e0baadbd97bd1d155f604c5c0e46df4902e166b9236f3e0e1a73b7c",
-  "tests/test_plus_engine.py": "3f08728526b7381a551845a233269dd3f3867644adc2f6275f5da759577d9062",
+  "tests/test_parquet_streaming.py": "9719fa3bda2a7b5025a2014b40b113ef1dcdd5607bb400ae30ca0affe1512361",
+  "tests/test_plus_engine.py": "6bbed05b012d1f8b7f93ca3429dca3d3080627a105c7f1229336161688ecf0fd",
   "tests/test_plus_ui.py": "4a1011509acc53ddf206218b870422ff07be38dbe20cc14be4c3ef577cacfc4f",
   "tests/test_ui.py": "a39eb752dd766e50634d6f2739576174e3b7de5ac4d14f410f2c669bac6d2eb4"
 }

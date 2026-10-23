@@ -161,22 +161,3 @@ def test_pages_have_full_count_offset_bounds_and_no_history_flood(project):
     for bad in (-1, True, 1.2, 2**63):
         with pytest.raises(ValueError, match="Offset"):
             project.query(sql, offset=bad)
-
-
-def test_parquet_staging_has_core_limits_and_cleans_temp(project, tmp_path, monkeypatch):
-    settings = []
-    original = Project._apply_limits
-
-    def capture(conn):
-        original(conn)
-        files = conn.execute("PRAGMA database_list").fetchall()
-        if any(".pip-export-" in str(row) for row in files):
-            settings.append(conn.execute("SELECT current_setting('memory_limit'), current_setting('threads'), current_setting('max_temp_directory_size')").fetchone())
-
-    monkeypatch.setattr(Project, "_apply_limits", staticmethod(capture))
-    target = tmp_path / "bounded.parquet"
-    assert project.export("SELECT i FROM range(5) AS t(i)", target, "parquet") == 5
-    assert settings and settings[0][1] == 2
-    assert settings[0][0].endswith("MiB") and float(settings[0][0].split()[0]) <= 512
-    assert settings[0][2] in {"0B", "0 B", "0 bytes"}
-    assert not list(tmp_path.glob(".pip-export-*"))
